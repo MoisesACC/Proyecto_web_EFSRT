@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle de la Incidencia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Detalle de la Incidencia</h1>
+        <p><strong>ID:</strong> <span th:text="${incidencia.codIncidencia}"></span></p>
+        <p><strong>Descripción:</strong> <span th:text="${incidencia.descripcion}"></span></p>
+        <p><strong>Estado:</strong> <span th:text="${incidencia.estado}"></span></p>
+        <!-- Ajuste para asegurarse de que fechaRegistro sea tratado correctamente -->
+        <p><strong>Fecha de Registro:</strong> <span th:text="${#temporals.format(incidencia.fechaRegistro, 'dd/MM/yyyy')}"></span></p> <!-- Formato de fecha -->
+        <p><strong>Empleado:</strong> <span th:text="${incidencia.empleado.nombre + ' ' + incidencia.empleado.apellido}"></span></p>
+        <p><strong>Categoría:</strong> <span th:text="${incidencia.categoria}"></span></p>
+        <p><strong>Nivel de Prioridad:</strong> <span th:text="${incidencia.nivelPrioridad}"></span></p>
+        <a href="/inc" class="btn btn-secondary">Volver</a>
+    </div>
+</body>
+</html>

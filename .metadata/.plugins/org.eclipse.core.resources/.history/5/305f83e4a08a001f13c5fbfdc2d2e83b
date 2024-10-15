@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestión de Atenciones</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-34FqhquE3w4AeD1tT8F8W9VQ1pYvGVywZQwib0/R4Hv0CiwYkM4DgAY1gqXvZwqR" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+        <a class="navbar-brand" href="/">Gestión SMV</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Inicio<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/inc">Mantenimiento Incidencias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ate">Atenciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/emp">Control Empleado</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="form-group mx-sm-3 mb-2">
+            <a th:href="@{/nuevoAte}" class="btn btn-success mb-3">Realizar Atención</a>
+        </div>
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Acciones</th>
+                    <th scope="col">Fecha Atención</th>
+                    <th scope="col">Presupuesto</th>
+                    <th scope="col">Técnico</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="atencion : ${listaAtencion}">
+                    <td th:text="${atencion.codAtencion}"></td>
+                    <td th:text="${atencion.acciones}"></td>
+                    <td th:text="${#temporals.format(atencion.fechaAtencion, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${atencion.presupuesto}"></td>
+                    <td th:text="${atencion.empleado.nombre + ' ' + atencion.empleado.apellido}"></td>
+                    <td>
+                        <button class="btn btn-info btn-detalle" data-id-atencion="${atencion.codAtencion}">Detalle</button>
+                        <a class="btn btn-primary" th:href="@{'/editarAte/' + ${atencion.codAtencion}}">Editar</a>
+                        <a class="btn btn-danger" th:href="@{'/eliminarAte/' + ${atencion.codAtencion}}" onclick="return confirm('¿Está seguro de eliminar este registro? Esta acción no se puede deshacer.')" >Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detalleModalLabel">Detalle de la Atención</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    <!-- Contenido del modal se cargará aquí -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <a id="generatePdfBtn" href="#" class="btn btn-outline-primary" target="_blank">Generar PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+zX3X96e2cm2tW3OIGtl9MaXzzvFRGe0BzW9/qF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YPTOiif1ZrZjX6mJww5iwHHS1xA/R8Z0V5rVppXQweTfCDoUSz5fuq4sKTU5Ctpw" crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Manejar clic en botón de detalle
+            document.querySelectorAll(".btn-detalle").forEach(function(button) {
+                button.addEventListener("click", function() {
+                    var atencionId = this.getAttribute("data-id-atencion");
+
+                    // Llamada AJAX para obtener detalles de la atención
+                    fetch(`/api/atencion/${atencionId}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Error en la respuesta de la red');
+                            return response.json();
+                        })
+                        .then(detalles => {
+                            // Cargar el contenido en el modal
+                            document.getElementById("modalContent").innerHTML = `
+                                <p><strong>Código de Atención:</strong> ${detalles.codAtencion}</p>
+                                <p><strong>Acciones:</strong> ${detalles.acciones}</p>
+                                <p><strong>Fecha de Atención:</strong> ${detalles.fechaAtencion}</p>
+                                <p><strong>Presupuesto:</strong> ${detalles.presupuesto}</p>
+                                <p><strong>Empleado:</strong> ${detalles.empleado}</p>
+                            `;
+
+                            // Actualizar el enlace para generar PDF
+                            document.getElementById("generatePdfBtn").setAttribute("href", `/generar-pdf/${atencionId}`);
+                            
+                            // Mostrar el modal usando Bootstrap 5
+                            var detalleModal = new bootstrap.Modal(document.getElementById('detalleModal'));
+                            detalleModal.show();
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+    </script>
+
+    <footer class="text-center mt-4">
+        <p>&copy; 2024 Superintendencia de Mercado de Valores. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle de la Atención</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+		body {
+		           background-color: #f8f9fa;
+		       }
+		       .card {
+		           margin-top: 20px;
+		       }
+		       .card-header {
+		           background-color: #007bff;
+		           color: white;
+		           font-size: 1.25rem;
+		           font-weight: bold;
+		       }
+		       .card-body p {
+		           font-size: 1rem;
+		           margin-bottom: 0.5rem;
+		       }
+		       .btn-secondary {
+		           background-color: #6c757d;
+		           border-color: #6c757d;
+		       }
+		       .header-icon {
+		           font-size: 1.5rem;
+		           margin-right: 10px;
+		       }
+		       .header-content {
+		           display: flex;
+		           align-items: center;
+		           justify-content: center;
+		       }
+		       .incidence-image {
+		           max-width: 100%;
+		           height: auto;
+		           border-radius: 5px;
+		       }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-header header-content">
+                <i class="bi bi-file-earmark-text header-icon"></i> <!-- Icono de archivo -->
+                <span>Detalle de la Atención</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p><strong>Código de Atención:</strong> <span th:text="${atencion.codAtencion}"></span></p>
+                        <p><strong>Acciones:</strong> <span th:text="${atencion.acciones}"></span></p>
+                        <p><strong>Fecha de Atención:</strong> <span th:text="${#temporals.format(atencion.fechaAtencion, 'dd/MM/yyyy')}"></span></p>
+                        <p><strong>Presupuesto:</strong> <span th:text="${atencion.presupuesto}"></span></p>
+                        <p><strong>Detalle Presupuesto:</strong> <span th:text="${atencion.detallePresupuesto}"></span></p>
+                        <p><strong>Observaciones:</strong> <span th:text="${atencion.observaciones}"></span></p>
+                        <p><strong>Empleado:</strong> <span th:text="${atencion.empleado.nombre + ' ' + atencion.empleado.apellido}"></span></p>
+                        <p><strong>Incidencia:</strong> <span th:text="${atencion.incidencia.descripcion}"></span></p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <img src="https://img.freepik.com/vector-gratis/pagina-error-404-pequenas-personas-reparando-sistema-pc_74855-11437.jpg" alt="Atención Image" class="incidence-image"> <!-- Imagen para acompañar los detalles -->
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="/ate" class="btn btn-secondary">Volver</a>
+                    <a th:href="@{/generar-pdf/${atencion.codAtencion}}" class="btn btn-outline-primary" target="_blank">Generar PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

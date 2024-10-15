@@ -1,0 +1,44 @@
+package edu.cibertec.util;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.view.document.AbstractPdfView;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+
+import edu.cibertec.models.Atencion;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+
+@Component("/ate")
+public class ListarClientesPdf extends AbstractPdfView{
+
+	@Override
+	protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		  @SuppressWarnings("unchecked")
+		List<Atencion> listaAtencion = (List<Atencion>) model.get("listaAtencion");
+	
+		  PdfPTable tablaClientes = new PdfPTable(7);
+		  
+		  listaAtencion.forEach(cliente -> {
+			 tablaClientes.addCell(cliente.getAcciones());
+			 tablaClientes.addCell(cliente.getCodAtencion().toString());
+			 tablaClientes.addCell(cliente.getDetallePresupuesto());
+			 tablaClientes.addCell(cliente.getObservaciones());
+			 tablaClientes.addCell(cliente.getEmpleado().getApellido());
+			 tablaClientes.addCell(cliente.getFechaAtencion().format(null));
+			 tablaClientes.addCell(cliente.getIncidencia().getCategoria());
+			  
+		  });
+		  
+		  document.add(tablaClientes);
+	}
+
+}

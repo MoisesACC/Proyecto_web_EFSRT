@@ -1,0 +1,115 @@
+package edu.cibertec.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import edu.cibertec.models.Atencion;
+import edu.cibertec.models.Empleado;
+import edu.cibertec.models.Incidencia;
+import edu.cibertec.services.AtencionServicio;
+import edu.cibertec.services.EmpleadoServicio;
+import edu.cibertec.services.IncidenciaServicio;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+@Controller
+public class AtencionControlador {
+    @Autowired
+    private EmpleadoServicio empleadoServicio;
+
+    @Autowired
+    private AtencionServicio atencionServicio;
+
+    @Autowired
+    private IncidenciaServicio incidenciaServicio;
+
+    @RequestMapping("/ate")
+    public String listarAtenciones(Model model) {
+        List<Atencion> listaAtencion = atencionServicio.listAtenciones();
+        List<Empleado> listaEmpleado = empleadoServicio.listaEmp();
+        
+        // Simplificar nombres y apellidos para mostrarlos en la vista
+        for (Empleado empleado : listaEmpleado) {
+            String[] nombres = empleado.getNombre().split(" ");
+            String[] apellidos = empleado.getApellido().split(" ");
+            if (nombres.length > 0) {
+                empleado.setNombre(nombres[0]); // Solo el primer nombre
+            }
+            if (apellidos.length > 0) {
+                empleado.setApellido(apellidos[0]); // Solo el primer apellido
+            }
+        }
+        
+        model.addAttribute("listaAtencion", listaAtencion);
+        return "indexAte"; // Devuelve la vista de la lista de atenciones
+    }
+
+    @RequestMapping("/nuevoAte")
+    public String mostrarFormularioDeRegistrar(Model model) {
+        Atencion atencion = new Atencion();
+        List<Incidencia> incidenciasNoProcesadas = incidenciaServicio.obtenerIncidenciasNoProcesadas();
+        
+        model.addAttribute("empleadosTecnicos", empleadoServicio.obtenerEmpleadosTecnicos());
+        model.addAttribute("incidencias", incidenciasNoProcesadas);
+        model.addAttribute("atencion", atencion);
+        return "nueva_atencion"; // Devuelve la vista del formulario de nueva atención
+    }
+
+    @RequestMapping("/atencion/detalle/{id}")
+    public String detalleAtencion(@PathVariable(name="id") Long id, Model model) {
+        Atencion atencion = atencionServicio.get(id);
+        model.addAttribute("atencion", atencion);
+        return "detalle_atencion"; // Devuelve la vista del detalle de atención
+    }
+
+    @RequestMapping(value="/guardarAte", method=RequestMethod.POST)
+    public String guardarAtencion(@ModelAttribute("atencion") Atencion atencion) {
+        boolean esNuevaAtencion = atencion.getCodAtencion() == null; // Verifica si es nueva atención
+
+        if (esNuevaAtencion) {
+            // Obtener la incidencia asociada a la nueva atención
+            Incidencia incidencia = atencion.getIncidencia();
+            atencion.setFechaAtencion(LocalDateTime.now());
+            incidencia.setEstado("Procesada"); // Cambiar el estado de la incidencia
+            incidenciaServicio.save(incidencia); // Guarda la incidencia
+        } else {
+            // Si es una edición, asegurarse de que la fecha de atención ya existe
+            Atencion atencionExistente = atencionServicio.get(atencion.getCodAtencion());
+            atencion.setFechaAtencion(atencionExistente.getFechaAtencion());
+        }
+
+        atencionServicio.saveAtencion(atencion); // Guarda o actualiza la atención
+        return "redirect:/ate"; // Redirige a la lista de atenciones
+    }
+
+    @RequestMapping("/editarAte/{id}")
+    public ModelAndView mostrarFormularioDeEditar(@PathVariable(name="id") Long id) {
+        ModelAndView modelo = new ModelAndView("editar_atencion");
+        Atencion atencion = atencionServicio.get(id);
+        modelo.addObject("atencion", atencion);
+        return modelo; // Devuelve la vista del formulario de edición
+    }
+
+    @RequestMapping("/eliminarAte/{id}")
+    public String eliminarAtencion(@PathVariable(name="id") Long id) {
+        Atencion atencion = atencionServicio.get(id);
+        if (atencion != null) {
+            Incidencia incidencia = atencion.getIncidencia();
+            atencionServicio.deleteAtencionById(id); // Elimina la atención
+            incidencia.setEstado("No Procesada"); // Cambia el estado de la incidencia
+            incidenciaServicio.save(incidencia); // Guarda la incidencia actualizada
+        }
+        return "redirect:/ate"; // Redirige a la lista de atenciones
+    }
+    
+   
+}

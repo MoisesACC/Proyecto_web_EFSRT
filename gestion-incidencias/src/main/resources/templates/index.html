@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestión de Incidencias</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        header, footer {
+            background: #0044cc;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        h2 {
+            color: #0044cc;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 2em;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .navbar {
+            background-color: #000;
+        }
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
+        .map-responsive {
+            overflow: hidden;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            position: relative;
+            height: 0;
+        }
+        .map-responsive iframe {
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+		    <a class="navbar-brand" href="/">Gestión SMV</a>
+		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		        <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <div class="collapse navbar-collapse" id="navbarNav">
+		        <ul class="navbar-nav ml-auto">
+		            <li class="nav-item active">
+		                <a class="nav-link" href="/">Inicio<span class="sr-only">(current)</span></a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link" href="/inc">Mantenimiento Incidencias</a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link" href="/ate">Atenciones</a>
+		            </li>
+		            <li class="nav-item">
+		                <a class="nav-link" href="/emp">Control Empleado</a>
+		            </li>
+		        </ul>
+		    </div>
+		</nav>
+
+    
+    <div class="container">
+        <header>
+            <h1>SUPERINTENDENCIA DE MERCADO DE VALORES</h1>
+        </header>
+        
+        <section class="my-5 text-center">
+            <h2>Bienvenidos</h2>
+            <p class="lead">
+                La Superintendencia de Mercado de Valores (SMV) es el organismo regulador encargado de supervisar y regular el mercado de valores en nuestro país. Nuestra misión es garantizar la transparencia, integridad y eficiencia del mercado de valores, protegiendo los intereses de los inversionistas y fomentando el desarrollo económico sostenible.
+            </p>
+            <p>
+                La SMV trabaja para asegurar que las entidades participantes del mercado de valores cumplan con las leyes y regulaciones establecidas, promoviendo un ambiente seguro y confiable para la inversión. Además, estamos comprometidos con la educación financiera y la divulgación de información relevante para los inversionistas y el público en general.
+            </p>
+        </section>
+        
+        <section class="my-5">
+            <h2>Nuestros Objetivos</h2>
+            <ul class="list-group">
+                <li class="list-group-item">Supervisar y regular las actividades del mercado de valores.</li>
+                <li class="list-group-item">Proteger los intereses de los inversionistas.</li>
+                <li class="list-group-item">Promover la transparencia y eficiencia del mercado.</li>
+                <li class="list-group-item">Fomentar el desarrollo económico sostenible.</li>
+            </ul>
+        </section>
+        
+        <section class="my-5">
+            <h2>Contáctanos</h2>
+            <p>
+                Si tienes alguna consulta o necesitas más información, no dudes en ponerte en contacto con nosotros.
+            </p>
+            <address>
+                <strong>Superintendencia de Mercado de Valores</strong><br>
+                Dirección: Calle Cibertec, Edificio SMV, Lima, Perú<br>
+                Teléfono: (123) 456-7890<br>
+                Correo Electrónico: <a href="mailto:info@smv.gov">info@smv.gov</a>
+            </address>
+            <div class="map-responsive mt-4">
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31211.74551017367!2d-77.05776777955242!3d-12.080067426715045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c93177909de3%3A0xd63126b8dfe444b8!2sCIBERTEC%20-%20Sede%20Lima%20Centro!5e0!3m2!1ses-419!2spe!4v1728843855745!5m2!1ses-419!2spe" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+    </div>
+
+    <footer class="py-3 bg-dark text-white text-center">
+        <p>&copy; 2024 Superintendencia de Mercado de Valores. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9+1BBO6oRkE+lzbJKAlUI9cxYhkKRO2kGGhXA" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

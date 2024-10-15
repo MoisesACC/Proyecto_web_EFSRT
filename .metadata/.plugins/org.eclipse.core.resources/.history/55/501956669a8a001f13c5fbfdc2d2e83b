@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle de la Incidencia</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .card-body p {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .header-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .incidence-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-header header-content">
+                <i class="bi bi-search header-icon"></i> <!-- Icono de lupa -->
+                <span>Detalle de la Incidencia</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p><strong>ID:</strong> <span th:text="${incidencia.codIncidencia}"></span></p>
+                        <p><strong>Descripción:</strong> <span th:text="${incidencia.descripcion}"></span></p>
+                        <p><strong>Estado:</strong> <span th:text="${incidencia.estado}"></span></p>
+                        <p><strong>Fecha de Registro:</strong> <span th:text="${#temporals.format(incidencia.fechaRegistro, 'dd/MM/yyyy')}"></span></p>
+                        <p><strong>Empleado:</strong> <span th:text="${incidencia.empleado.nombre + ' ' + incidencia.empleado.apellido}"></span></p>
+                        <p><strong>Categoría:</strong> <span th:text="${incidencia.categoria}"></span></p>
+                        <p><strong>Nivel de Prioridad:</strong> <span th:text="${incidencia.nivelPrioridad}"></span></p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <img src="https://example.com/incidencia-image.png" alt="Incidencia Image" class="incidence-image"> <!-- Imagen para acompañar los detalles -->
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="/inc" class="btn btn-secondary">Volver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

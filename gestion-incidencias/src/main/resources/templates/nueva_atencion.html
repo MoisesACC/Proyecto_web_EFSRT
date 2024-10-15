@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registro de Atención</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Color de fondo claro */
+        }
+        .card {
+            margin-top: 50px; /* Espaciado superior */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2>Registro de Atención</h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/guardarAte}" th:object="${atencion}" method="post">
+                            <div class="form-group">
+                                <label for="acciones">Acciones:</label>
+                                <input type="text" id="acciones" name="acciones" th:field="*{acciones}" class="form-control" placeholder="Ingrese acciones" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="presupuesto">Presupuesto:</label>
+                                <input type="number" id="presupuesto" name="presupuesto" th:field="*{presupuesto}" step="0.01" min="0" class="form-control" placeholder="Ingrese presupuesto" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="detallePresupuesto">Detalle de Presupuesto:</label>
+                                <input type="text" id="detallePresupuesto" name="detallePresupuesto" th:field="*{detallePresupuesto}" class="form-control" placeholder="Ingrese detalle de presupuesto" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="observaciones">Observaciones:</label>
+                                <textarea id="observaciones" name="observaciones" th:field="*{observaciones}" class="form-control" placeholder="Ingrese observaciones" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="empleado">Empleado:</label>
+                                <select id="empleado" name="empleado" th:field="*{empleado}" class="form-control" required>
+                                    <option th:each="empleado : ${empleadosTecnicos}" th:value="${empleado.codEmpleado}" th:text="${empleado.nombre + ' ' + empleado.apellido}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="incidencia">Selecciona una incidencia:</label>
+                                <select id="incidencia" th:field="*{incidencia}" class="form-control" required>
+                                    <option th:each="incidencia : ${incidencias}" th:value="${incidencia.codIncidencia}" th:text="${incidencia.descripcion}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <a href="/ate" class="btn btn-warning">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
